@@ -1,0 +1,20 @@
+{
+  "name": "AUTOCORE — Gestão para Oficinas",
+  "short_name": "AUTOCORE",
+  "description": "Ordens de serviço, clientes, veículos, estoque, caixa e comissões da sua oficina.",
+  "id": "/",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "theme_color": "#0F1115",
+  "background_color": "#0F1115",
+  "categories": ["business", "productivity"],
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
