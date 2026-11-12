@@ -1,20 +1,21 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, ArrowRight } from "lucide-react";
+import { Menu, X, Lock } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import logo from "@/assets/autocore-logo.png";
+import AutoCoreLogo from "@/components/landing/AutoCoreLogo";
 
 const links = [
-  { label: "Benefícios", href: "#beneficios" },
-  { label: "Como funciona", href: "#como-funciona" },
-  { label: "Recursos", href: "#recursos" },
-  { label: "Planos", href: "#planos" },
+  { label: "Demonstração", href: "/#demonstracao-ao-vivo" },
+  { label: "Benefícios", href: "/#beneficios" },
+  { label: "Recursos", href: "/#recursos" },
+  { label: "Planos", href: "/#planos" },
+  { label: "FAQ", href: "/#faq" },
+  { label: "Contato", href: "/#contato" },
 ];
 
 export default function LandingNav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [hoveredHref, setHoveredHref] = useState<string | null>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -25,106 +26,109 @@ export default function LandingNav() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "lp-nav-glass shadow-[0_10px_36px_-14px_rgba(0,102,255,0.22)]"
-          : "bg-gradient-to-b from-background/60 via-background/20 to-transparent backdrop-blur-sm"
-      }`}
+      role="banner"
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${scrolled
+        ? "lp-nav-glass shadow-[0_12px_40px_-12px_rgba(0,102,255,0.28)]"
+        : "bg-gradient-to-b from-background/80 via-background/30 to-transparent backdrop-blur-md"
+        }`}
     >
-      <div className="wrapper-container flex h-16 items-center justify-between">
-        <Link to="/" className="group flex items-center gap-2.5">
-          <div className="relative grid place-items-center rounded-lg bg-white/[0.04] p-1 ring-1 ring-white/[0.08] transition-all duration-300 group-hover:ring-primary/40 group-hover:shadow-[0_0_20px_-4px_hsla(211,100%,50%,0.45)]">
-            <img src={logo} alt="AutoCore" className="h-6 w-6 rounded-sm object-contain" />
+      <div className="wrapper-container flex h-20 items-center justify-between">
+        {/* LOGO OFF-WHITE MAIOR COM PONTEIRO VERMELHO (SEM FUNDO E SEM EFEITOS) */}
+        <Link
+          to="/"
+          aria-label="AutoCore - Ir para a página inicial"
+          className="flex items-center gap-3 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg"
+        >
+          <AutoCoreLogo className="h-10 w-10 shrink-0" />
+          <div className="flex flex-col">
+            <span className="text-[22px] font-black tracking-tight leading-none">
+              <span className="text-[#F5F5F2]">Auto</span>
+              <span className="bg-gradient-to-r from-primary to-[hsl(var(--brand-cyan))] bg-clip-text text-transparent">
+                Core
+              </span>
+            </span>
+            <span className="text-[9px] font-semibold tracking-[0.2em] uppercase text-muted-foreground/75 mt-0.5">
+              Gestão de Oficinas
+            </span>
           </div>
-          <span className="text-[18px] font-bold tracking-tight">
-            <span className="text-chrome">Auto</span>
-            <span className="text-gradient">Core</span>
-          </span>
         </Link>
 
+        {/* NAVEGAÇÃO LIMPA E ELEGANTE (SEM PILL) */}
         <nav
-          onMouseLeave={() => setHoveredHref(null)}
-          className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 rounded-full border border-white/[0.06] bg-white/[0.02] px-2 py-1 backdrop-blur-md md:flex"
+          role="navigation"
+          aria-label="Navegação principal do site"
+          className="hidden md:flex items-center gap-8 lg:gap-10"
         >
-          {links.map((l) => {
-            const isHovered = hoveredHref === l.href;
-            return (
-              <a
-                key={l.href}
-                href={l.href}
-                onMouseEnter={() => setHoveredHref(l.href)}
-                className="relative rounded-full px-3.5 py-1.5 text-[13px] font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground"
-              >
-                {isHovered && (
-                  <motion.span
-                    layoutId="nav-pill"
-                    className="absolute inset-0 -z-10 rounded-full bg-primary/15 ring-1 ring-primary/30"
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                  />
-                )}
-                {l.label}
-              </a>
-            );
-          })}
+          {links.map((l) => (
+            <a
+              key={l.href}
+              href={l.href}
+              aria-label={`Ir para a seção ${l.label}`}
+              className="text-[14px] font-medium text-muted-foreground/85 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-sm py-1"
+            >
+              {l.label}
+            </a>
+          ))}
         </nav>
 
-        <div className="hidden items-center gap-4 md:flex">
+        {/* AÇÃO EM DESTAQUE DA DIREITA (LOCK + ENTRAR) */}
+        <div className="hidden items-center md:flex">
           <Link
             to="/login"
-            className="text-[13px] font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground"
+            aria-label="Acessar sua conta AutoCore"
+            className="btn-brand group inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-[14px] font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary shadow-[0_0_25px_rgba(0,102,255,0.35)]"
           >
-            Entrar
-          </Link>
-          <Link
-            to="/signup"
-            className="btn-brand group inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-[13px] font-semibold"
-          >
-            <span>Testar grátis</span>
-            <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+            <Lock className="h-4 w-4 transition-transform duration-200 group-hover:scale-110" aria-hidden="true" />
+            <span>Entrar</span>
           </Link>
         </div>
 
+        {/* BOTÃO MOBILE */}
         <button
           onClick={() => setOpen((v) => !v)}
-          aria-label={open ? "Fechar menu" : "Abrir menu"}
-          className="rounded-md p-1.5 text-muted-foreground transition-colors hover:text-foreground md:hidden"
+          aria-label={open ? "Fechar menu de navegação" : "Abrir menu de navegação"}
+          aria-expanded={open}
+          aria-controls="menu-mobile-principal"
+          className="rounded-lg p-2 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary md:hidden"
         >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          {open ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
         </button>
       </div>
 
+      {/* MENU MOBILE RETRATIL */}
       <AnimatePresence>
         {open && (
           <motion.div
+            id="menu-mobile-principal"
+            role="region"
+            aria-label="Menu móvel"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.22, ease: "easeInOut" }}
-            className="overflow-hidden lp-nav-glass md:hidden"
+            className="overflow-hidden lp-nav-glass border-b border-white/[0.08] md:hidden"
           >
             <div className="wrapper-container flex flex-col gap-1 py-4">
               {links.map((l) => (
                 <a
                   key={l.href}
                   href={l.href}
+                  aria-label={`Ir para a seção ${l.label}`}
                   onClick={() => setOpen(false)}
-                  className="rounded-lg px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-primary/10 hover:text-foreground"
+                  className="rounded-lg px-3.5 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-primary/10 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 >
                   {l.label}
                 </a>
               ))}
-              <div className="mt-3 flex flex-col gap-2">
+              <div className="mt-3 flex flex-col gap-2 pt-2 border-t border-white/[0.06]">
                 <Link
                   to="/login"
-                  className="rounded-lg lp-hairline px-4 py-2.5 text-center text-sm font-medium text-foreground"
+                  aria-label="Entrar na conta AutoCore"
+                  onClick={() => setOpen(false)}
+                  className="btn-brand inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-center text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 >
-                  Entrar
-                </Link>
-                <Link
-                  to="/signup"
-                  className="btn-brand rounded-lg px-4 py-2.5 text-center text-sm font-semibold"
-                >
-                  Testar grátis
+                  <Lock className="h-4 w-4" aria-hidden="true" />
+                  <span>Entrar</span>
                 </Link>
               </div>
             </div>

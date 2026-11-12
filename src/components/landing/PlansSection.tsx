@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Check, ArrowRight, Sparkles, Zap } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Check, ArrowRight, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Reveal, SpotlightCard } from "@/components/landing/motion";
-import AsaasSandboxCheckoutModal from "@/components/landing/AsaasSandboxCheckoutModal";
 
 export const plans = [
   {
@@ -45,29 +45,32 @@ export const plans = [
 
 export default function PlansSection({ id = "planos" }: { id?: string }) {
   const [annual, setAnnual] = useState(true);
-  const [checkoutPlan, setCheckoutPlan] = useState<"Starter" | "Pro" | "Premium" | null>(null);
 
   return (
-    <section id={id} className="relative py-24 md:py-32">
-      <div className="pointer-events-none absolute inset-0 lp-stage-glow opacity-50" />
+    <section id={id} aria-labelledby="planos-heading" className="relative py-24 md:py-32">
+      <div className="pointer-events-none absolute inset-0 lp-stage-glow opacity-50" aria-hidden="true" />
       <div className="wrapper-container relative">
         <Reveal>
           <div className="section-header-center">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/25 bg-primary/[0.08] px-3.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
-              Planos & Investimento
-            </span>
-            <h2 className="mt-4 text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl md:text-[44px]">
+            <h2 id="planos-heading" className="text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl md:text-[44px]">
               Um plano para cada <span className="text-gradient">ritmo de oficina</span>.
             </h2>
             <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-muted-foreground">
               Comece sem fidelidade e escale sua operação conforme o volume do seu pátio cresce.
             </p>
 
-            <div className="mt-7 relative inline-flex w-fit items-center rounded-full border border-white/[0.08] bg-surface-1/90 p-1 backdrop-blur-md">
+            <div
+              role="radiogroup"
+              aria-label="Periodicidade de cobrança dos planos"
+              className="mt-7 relative inline-flex w-fit items-center rounded-full border border-white/[0.08] bg-surface-1/90 p-1 backdrop-blur-md"
+            >
               <button
                 type="button"
+                role="radio"
+                aria-checked={!annual}
+                aria-label="Cobrança mensal sem fidelidade"
                 onClick={() => setAnnual(false)}
-                className={`relative z-10 rounded-full px-5 py-2 text-[13px] font-medium transition-colors duration-200 ${
+                className={`relative z-10 rounded-full px-5 py-2 text-[13px] font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                   !annual ? "text-foreground" : "text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -82,8 +85,11 @@ export default function PlansSection({ id = "planos" }: { id?: string }) {
               </button>
               <button
                 type="button"
+                role="radio"
+                aria-checked={annual}
+                aria-label="Cobrança anual com vinte por cento de desconto"
                 onClick={() => setAnnual(true)}
-                className={`relative z-10 rounded-full px-5 py-2 text-[13px] font-medium transition-colors duration-200 ${
+                className={`relative z-10 rounded-full px-5 py-2 text-[13px] font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                   annual ? "text-foreground" : "text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -170,33 +176,36 @@ export default function PlansSection({ id = "planos" }: { id?: string }) {
                     </ul>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => setCheckoutPlan(p.name)}
-                    className={`group mt-8 inline-flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3.5 text-sm font-semibold transition-all duration-200 ${
+                  <Link
+                    to={`/checkout?plan=${p.name}&billing=${annual ? "annual" : "monthly"}`}
+                    aria-label={`${p.cta} para o plano ${p.name} por R$ ${annual ? p.yearly : p.monthly} por mês`}
+                    className={`group mt-8 inline-flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3.5 text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                       isPopular
                         ? "btn-brand"
                         : "border border-white/[0.1] bg-white/[0.03] text-foreground hover:border-primary/40 hover:bg-primary/10"
                     }`}
                   >
                     <span>{p.cta}</span>
-                    <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
-                  </button>
+                    <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden="true" />
+                  </Link>
                 </SpotlightCard>
               </Reveal>
             );
           })}
         </div>
-      </div>
 
-      {checkoutPlan && (
-        <AsaasSandboxCheckoutModal
-          plans={plans}
-          initialPlanName={checkoutPlan}
-          initialAnnual={annual}
-          onClose={() => setCheckoutPlan(null)}
-        />
-      )}
+        {/* Botão para Página de Comparativo Completo dos Planos */}
+        <div className="mt-10 flex justify-center">
+          <Link
+            to="/pricing"
+            aria-label="Abrir página de comparativo completo dos planos"
+            className="group inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] px-6 py-3 text-sm font-semibold text-foreground transition-all duration-200 hover:border-primary/45 hover:bg-primary/10 hover:text-cyan-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            <span>Comparar todos os recursos dos planos</span>
+            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden="true" />
+          </Link>
+        </div>
+      </div>
     </section>
   );
 }

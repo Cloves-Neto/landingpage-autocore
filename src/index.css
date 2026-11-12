@@ -99,6 +99,16 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;
   }
+  /* Mantém inputs escuros mesmo com preenchimento automático (autofill) do navegador */
+  .lp input:-webkit-autofill,
+  .lp input:-webkit-autofill:hover,
+  .lp input:-webkit-autofill:focus,
+  .lp textarea:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px #050814 inset !important;
+    -webkit-text-fill-color: hsl(var(--foreground)) !important;
+    caret-color: hsl(var(--foreground));
+    transition: background-color 5000s ease-in-out 0s;
+  }
 }
 
 @layer utilities {
@@ -267,6 +277,11 @@
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+  section[id],
+  div[id] {
+    scroll-margin-top: 5.5rem;
   }
   body {
     overflow-x: hidden;
