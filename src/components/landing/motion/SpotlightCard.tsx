@@ -6,6 +6,7 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
+import type { HTMLMotionProps } from "framer-motion";
 import type { MouseEvent, ReactNode } from "react";
 
 /**
@@ -16,7 +17,7 @@ import type { MouseEvent, ReactNode } from "react";
  * Respeita `prefers-reduced-motion` (desliga o tilt).
  */
 
-interface SpotlightCardProps {
+interface SpotlightCardProps extends HTMLMotionProps<"div"> {
   children: ReactNode;
   className?: string;
   /** Inclinação máxima em graus (padrão 4). Use 0 para desligar. */
@@ -35,6 +36,7 @@ export default function SpotlightCard({
   maxTilt,
   tiltMax,
   radius = 320,
+  ...props
 }: SpotlightCardProps) {
   const reduce = useReducedMotion();
   const resolvedTilt = tiltMax ?? maxTilt ?? 4;
@@ -70,6 +72,7 @@ export default function SpotlightCard({
 
   return (
     <motion.div
+      {...props}
       onMouseMove={handleMove}
       onMouseLeave={handleLeave}
       style={{ rotateX, rotateY, transformPerspective: 900 }}
